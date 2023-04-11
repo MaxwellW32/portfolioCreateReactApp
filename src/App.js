@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { Routes, Route, Switch } from "react-router-dom";
 import Home from "./components/Home";
 import VideoGenerator from "./components/Projects/VideoGenerator";
@@ -15,6 +15,7 @@ import NotFound from "./components/NotFound";
 import ToDo from "./components/Projects/ToDo";
 import Calcultor from "./components/Projects/Calcultor";
 import Test from "./components/Projects/Test";
+import TechHaven from "./components/Projects/TechHaven";
 
 let rotateTheme = 0;
 function App() {
@@ -31,7 +32,7 @@ function App() {
     });
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     //read theme from browser if there
     const oldThemePick = localStorage.getItem("oldThemePick");
 
@@ -273,6 +274,18 @@ function App() {
                     Calculator
                   </Link>
                 </li>
+
+                <li>
+                  <Link
+                    className="detectClickTMobile"
+                    onClick={() => {
+                      setNavHidden(true);
+                    }}
+                    to="/techHaven"
+                  >
+                    Eccomerce
+                  </Link>
+                </li>
               </div>
             </ul>
             <ul>
@@ -415,6 +428,7 @@ function App() {
 
         <Route path="/toDo" element={<ToDo />} />
         <Route path="/calculator" element={<Calcultor />} />
+        <Route path="/techHaven" element={<TechHaven />} />
 
         <Route path="/learned" element={<Learned />} />
         <Route path="/journal" element={<Journal />} />

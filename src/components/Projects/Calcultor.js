@@ -1,113 +1,125 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
 
-let pIncre;
+let pIncre = -1;
 function Calcultor(props) {
   const [input, setInput] = useState("");
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState();
 
-  const [hasOperations, setHasOperations] = useState(false);
+  const isMathExpression = /^[\d()+\-*/%.]+$/.test(input);
+  const endsWithOperator = /^[()+\-*/%.]+$/.test(input[input.length -1])
 
-  const [lastSymbol, setLastSymbol] = useState(false);
-  const [symbolClicked, setSymbolClicked] = useState(false);
+
+  useEffect(()=>{
+    try {    
+      if (isMathExpression && !endsWithOperator){
+        setResult(eval(input))
+      }
+    } catch (error) {
+    }
+  },[input])
+  //calc result
+
   const [pressedEnter, setPressedEnter] = useState(false);
-
-  //   const [password, setPassword] = useState("((");
-  const [password, setPassword] = useState("(((*1234");
+  
+  //chain on answer on enter press
+  if (pressedEnter && endsWithOperator) {
+    setInput(result + input[input.length - 1]);
+    setPressedEnter(false)
+  }
   const [passValid, setPassValid] = useState(false);
+  const [password, setPassword] = useState("");
   const [matchedPass, setMatchedPass] = useState(false);
-
   const [showSecrets, setShowSecrets] = useState(false);
 
-  //check if input field matches password
-  //if input field at any point doesnt match set valid to false -- input length has to be 0 to set back to true
+  const [firstLogin, setFirstLogin] = useState(false)
 
-  function pressEnter() {
-    setPressedEnter(true);
-  }
+  const passwordSet = password.length > 7
 
-  useEffect(() => {
-    if (input !== "") {
-      setResult(() => {
-        try {
-          if (input) {
-            const isMathExpression = /^[\d()+\-*/%.]+$/.test(input);
-            const hasOperations = /[+\-*/%]/.test(input); // returns false
-            setHasOperations(hasOperations);
+  useLayoutEffect(()=>{
+    const pass = localStorage.getItem("pass")
+    if (pass){
+      setPassword(pass)
+    }
 
-            return isMathExpression ? eval(input) : "";
-          } else {
-            return "";
-          }
-        } catch (error) {
-          return "";
+  },[])
+  useLayoutEffect(()=>{
+    const fli = localStorage.getItem("fli")
+
+    if (fli && passwordSet){
+      setFirstLogin(false)
+    }else{
+      setFirstLogin(true)
+      localStorage.setItem("fli", false)
+    }
+  },[passwordSet])
+
+  //password check  
+  useEffect(()=>{
+    if (input){
+      if (password[pIncre] === input[pIncre]) {
+        if (password[pIncre] === undefined){
+          setPassValid(false);
+        }else{
+          setPassValid(true)
         }
-      });
-    }
-  }, [input]);
-
-  useEffect(() => {
-    if (pressedEnter && symbolClicked) {
-      setInput(result + lastSymbol);
-      setPressedEnter(false);
-      setSymbolClicked(false);
-    }
-  }, [pressedEnter, symbolClicked]);
-
-  const handleClick = (e) => {
-    if (input.length == 0) {
-      pIncre = 0;
-    }
-
-    console
-      .log
-      //   `password at i seen as ${password[i]}, e.target value ${e.target.value}`
-      ();
-
-    if (e.target.value === "ignore" && matchedPass && passValid) {
-      setShowSecrets(true);
-    }
-
-    //password time
-    if (input + e.target.value === password) {
-      if (passValid) {
+      } else {
+        setPassValid(false);
+      }
+   
+      if (input === password && passValid) {
         setMatchedPass(true);
       }
+
+    }else{
+      pIncre = -1
     }
+  },[input, passValid])
 
-    if (password[pIncre] === e.target.value) {
-      setPassValid(true);
-    } else {
-      setPassValid(false);
+  function handleClick(e) {
+    pIncre++
+    
+    if (e.target.value === "ignore" && matchedPass && passValid) {
+      //on equal pess
+      setShowSecrets(true);
+      clearAll()
     }
-
-    pIncre += 1;
-
+       
+    //set new values of input
     if (e.target.value !== "ignore") {
-      setInput((prevInput) => prevInput + e.target.value);
-    }
+      setInput((prevInput) => {
+ 
+        if (e.target.value === ")" || e.target.value === "("){
+          let bracketCount = 0;
+          for (let index = 0; index < prevInput.length; index++) {
+            if (prevInput[index] === "(" || prevInput[index] === ")" ){
+              bracketCount++
+            }
+          }
+          
+          if (bracketCount % 2 === 1){
+            return prevInput + ")"
+          }else{
+            return prevInput + "("
+          }
 
-    let symbolcheck = /[+\-*/]/.test(e.target.value);
-    if (symbolcheck) {
-      setLastSymbol(e.target.value);
-      setSymbolClicked(true);
-    } else {
-      setSymbolClicked(false);
-    }
+        }else{
+          return  prevInput + e.target.value
+        }
+      });
+    }   
   };
 
   function clearAll() {
     setInput("");
-    setResult("");
+    setPassValid(false)
+    setResult()
+    setPressedEnter(false)
   }
 
   function subLast() {
     setInput((prevInput) => prevInput.slice(0, -1));
   }
-
-  //implement hidden diary
-  //implement brackets
-  //implement cursor position
-
+  
   const secretImages = [
     {
       imgInfo: "",
@@ -149,14 +161,35 @@ function Calcultor(props) {
   let rndI = Math.floor(Math.random() * secretImages.length);
   let rndK = rndI + 2;
 
+
+const passInput = useRef(null)
   return (
     <div id="calcMainDiv">
+      {firstLogin && 
+        <div id="calcSetPass">
+          <p>Set number pattern password</p>
+          <p>Password will be triggered with {"()()()*"}</p>
+          <form onSubmit={(e)=>{
+            e.preventDefault()
+            if (passInput.current.value.length > 0 && /^[0-9]*$/.test(passInput.current.value)){ 
+              setPassword("()()()*" + passInput.current.value)
+              localStorage.setItem("pass", "()()()*" + passInput.current.value)
+            }
+          }}>
+
+            <input type="text" ref={passInput}/>
+            <button role="submit">Submit</button>
+          </form>
+
+        </div>}
       {showSecrets && (
         <div
           id="calcSecrets"
-          style={{ display: showSecrets ? "block" : "none" }}
         >
           <p>All my secrets!</p>
+          <button className="mainBttn" onClick={()=>{
+            setShowSecrets(false)
+          }}>Close</button>
           <div id="calcSecretImgCont">
             {secretImages.map((eachImgObj, index) => {
               return (
@@ -205,7 +238,7 @@ function Calcultor(props) {
           />
 
           <p id="calcResult" type="text">
-            {hasOperations ? result : ""}
+            {result === undefined ? ""  : result}
           </p>
           <div id="calcBttmLine"></div>
         </div>
@@ -290,7 +323,7 @@ function Calcultor(props) {
             value="ignore"
             onClick={(e) => {
               handleClick(e);
-              pressEnter();
+              setPressedEnter(true);
             }}
             className="calcBttn calcBttnCirc"
           >
