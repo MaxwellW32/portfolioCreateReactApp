@@ -1,0 +1,34 @@
+{
+  "files": {
+    "main.css": "/portfolio/static/css/main.b65ffba0.css",
+    "main.js": "/portfolio/static/js/main.2e6225a3.js",
+    "static/media/donutmiddle.png": "/portfolio/static/media/donutmiddle.c3284d48b791652aa625.png",
+    "static/media/donutjar1.jpeg": "/portfolio/static/media/donutjar1.e41483161dbdf83c267d.jpeg",
+    "static/media/donut4.jpeg": "/portfolio/static/media/donut4.70db28e184c600075b98.jpeg",
+    "static/media/donut3.jpeg": "/portfolio/static/media/donut3.77a80ff81404aa74946a.jpeg",
+    "static/media/compback.png": "/portfolio/static/media/compback.9349e95079b487610915.png",
+    "static/media/donutjar2.jpeg": "/portfolio/static/media/donutjar2.355264d20255409c6dac.jpeg",
+    "static/media/donutLogo.png": "/portfolio/static/media/donutLogo.41def641251ebb850996.png",
+    "static/media/smallpc.png": "/portfolio/static/media/smallpc.86d82d8eb89d2cd626e2.png",
+    "static/media/donut2.jpeg": "/portfolio/static/media/donut2.92ca2033bd991e2e2799.jpeg",
+    "static/media/donut5.jpeg": "/portfolio/static/media/donut5.9c6cf82cc2a51ad2d59f.jpeg",
+    "static/media/newBg.svg": "/portfolio/static/media/newBg.80a6be74f46a62d269f1.svg",
+    "static/media/land.svg": "/portfolio/static/media/land.33896239352be4b51fb72277023756fb.svg",
+    "static/media/meta.pdf": "/portfolio/static/media/meta.a0eaa7671f309b4a4a6e.pdf",
+    "static/media/donutFrame1.svg": "/portfolio/static/media/donutFrame1.985df6e7d0eec3e2fe1f.svg",
+    "static/media/donut1.jpeg": "/portfolio/static/media/donut1.233f4c065bc7602e4e02.jpeg",
+    "static/media/cRock.svg": "/portfolio/static/media/cRock.5aa7f8ede56ce2d88b7a8fd41844598e.svg",
+    "static/media/resumeUpdated.pdf": "/portfolio/static/media/resumeUpdated.bad7a8970897ebae85f1.pdf",
+    "static/media/sky.svg": "/portfolio/static/media/sky.a8f03b58c1e4052f2add9078fecef63c.svg",
+    "static/media/dTagline.png": "/portfolio/static/media/dTagline.e25728d71dfd89b2dd3f.png",
+    "static/media/planet.svg": "/portfolio/static/media/planet.181882631cef7282514fe36d17891869.svg",
+    "static/media/fighter.webp": "/portfolio/static/media/fighter.2f01ea3f146fddc1200b.webp",
+    "index.html": "/portfolio/index.html",
+    "main.b65ffba0.css.map": "/portfolio/static/css/main.b65ffba0.css.map",
+    "main.2e6225a3.js.map": "/portfolio/static/js/main.2e6225a3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b65ffba0.css",
+    "static/js/main.2e6225a3.js"
+  ]
+}
