@@ -1,8 +1,56 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-
+import eye from "../../raw/ecommerce/eyecool.png"
+import eyeShadow from "../../raw/ecommerce/eye shadow.png"
+import eyeOutline from "../../raw/ecommerce/eye outline only.png"
 function Learned() {
+
+  useEffect(()=>{
+    const eyeCont = document.querySelector(".eyeCont")
+    const realEye = document.querySelector(".realeye")
+
+    const moveEyes = ({clientX, clientY})=>{
+      const mouseX = clientX
+      const mouseY = clientY
+
+      const anchor = document.getElementById("anchor")
+      const rekt = anchor.getBoundingClientRect()
+      const anchorX = rekt.left + rekt.width / 2
+      const anchorY = rekt.top + rekt.height / 2
+
+      const angleDeg = angle(mouseX, mouseY, anchorX, anchorY)
+
+      eyeCont.style.transform = `rotate(${angleDeg}deg)`
+      realEye.style.rotate = `${angleDeg*-1}deg`
+
+    }
+
+    const angle = (cx, cy, ex, ey)=>{
+      const dy = ey - cy
+      const dx = ex - cx
+      const rad = Math.atan2(dy, dx)
+      const deg = rad * 180 / Math.PI
+      return deg
+
+    }
+
+    document.addEventListener("mousemove", moveEyes)
+
+    return ()=>document.removeEventListener("mousemove", moveEyes)
+  },[])
+
+
   return (
     <div className="LearnDiv">
+
+      <div className="myCont" id="anchor">
+        <div className="eyeCont">
+          <img className="realeye" src={eye}/>
+        </div>
+        <img src={eyeShadow}/>
+        <img src={eyeOutline}/>
+      </div>
+
+
       <section className="hidden">
         <h1 id="htmlStart">HTML</h1>
         <p>
